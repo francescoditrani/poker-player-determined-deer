@@ -88,9 +88,9 @@ object Player {
   }
 
 
-  def currentStackLow(stack: Int, small_blind: Int): Boolean = {
-    val big_blind = 2*small_blind
-    stack <= big_blind
+  def currentPotkLow(pot: Int, small_blind: Int): Boolean = {
+    val onlyBlinds = 3*small_blind
+    pot <= onlyBlinds
   }
 
   def calculateBetForPlayer(jsonObject: JsonObject, meAsAPlayer: JsonObject) = {
@@ -110,13 +110,13 @@ object Player {
     val doubleraise = call + minimum_raise*2
     val small_blind = jsonObject.get("small_blind").getAsInt()
 
-
+    val pot = jsonObject.get("pot").getAsInt()
 
 
     myCards match {
       case _ if isTrisIn(myCards ++ communityCards) => raise
       case _ if areCoupleOfCardsIn(myCards ++ communityCards) => call
-      case _ if aGoodCardIn(myCards) && currentStackLow(stack, small_blind) => call
+      case _ if aGoodCardIn(myCards) && currentPotkLow(pot, small_blind) => call
       case _ => 0
     }
 
