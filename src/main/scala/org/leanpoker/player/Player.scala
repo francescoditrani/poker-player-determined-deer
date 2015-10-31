@@ -130,7 +130,7 @@ object Player {
       case _ if isGoodDoubleIn(myCards ++ communityCards) => call
       case _ if small_blind == 160 => 0
       case _ if aGoodCardIn(myCards) && currentPotkLow(pot, small_blind) => call
-      case _ if bet_index == 6 && currentPotkLow(pot, small_blind) => raise
+//      case _ if bet_index == 6 && currentPotkLow(pot, small_blind) => raise
       case _ => 0
     }
 
