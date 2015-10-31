@@ -64,7 +64,9 @@ object Player {
     }
   }
 
-//  def areCoupleOfCardsIn(myCards: Seq[String]): Boolean = ???
+  def areCoupleOfCardsIn(myCards: Seq[String]): Boolean = {
+    myCards.toSet.size < myCards.size
+  }
 
 
   def calculateBetForPlayer(jsonObject: JsonObject, meAsAPlayer: JsonObject) = {
@@ -84,7 +86,7 @@ object Player {
     println(s"$largest_current $stack, $bet,$myCards, $playable, $call"  )
 
     myCards match {
-//      case _ if areCoupleOfCardsIn(myCards) => raise
+      case _ if areCoupleOfCardsIn(myCards) => raise
       case _ if aGoodCardIn(myCards) => call
       case _ => 0
     }
