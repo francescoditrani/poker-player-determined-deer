@@ -121,6 +121,14 @@ object Player {
 
   }
 
+  def veryGoodDouble(cards: Seq[String]): Boolean = {
+    val sequenceOfTris: Seq[Boolean] = cards.groupBy(identity).map { case (item, duplicates) => {
+      duplicates.size >= 2 && Seq("Q","K","A").contains(item)
+    }
+    }.toSeq
+    sequenceOfTris.contains(true)
+  }
+
   def calculateBetForPlayer(request: JsonObject, meAsAPlayer: JsonObject) = {
     val largest_current = request.get("current_buy_in").getAsInt()
 
@@ -146,8 +154,9 @@ object Player {
 
     myCards match {
 //      case _ if goodCommonNotForMyCards(communityCards, myCards) => 0
-      case _ if isTrisIn(myCards ++ communityCards) => raise
+      case _ if isTrisIn(myCards ++ communityCards) => 9000
 //      case _ if twoOfTheSameType(myCards ++ communityCards) => call
+      case _ if veryGoodDouble(myCards ++ communityCards) => 9000
       case _ if isGoodDoubleIn(myCards ++ communityCards) => call
 //      case _ if isNotSoGoodDoubleIn(myCards ++ communityCards) => call
 //      case _ if aGoodCardIn(myCards) && currentPotkLow(request, small_blind) => call
