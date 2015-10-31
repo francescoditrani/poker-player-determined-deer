@@ -18,8 +18,14 @@ object Player {
   }
 
 
-  def goodCards() = {
-    true
+  def goodSingleCard(singleCard: String): Boolean = {
+    Seq("J","Q","K","A", "10").contains(singleCard)
+
+  }
+
+
+  def goodCards(myCards: Seq[String]): Boolean = {
+    myCards.exists(goodSingleCard)
   }
 
 
@@ -73,7 +79,7 @@ object Player {
     println(s"$largest_current $stack, $bet,$myCards, $playable, $call"  )
 
     myCards match {
-      case _ if goodCards() => call
+      case _ if goodCards(myCards) => call
       case _ => 0
     }
 
