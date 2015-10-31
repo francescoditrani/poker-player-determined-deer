@@ -109,6 +109,14 @@ object Player {
 //  }
 
 
+  def isNotSoGoodDoubleIn(cards: Seq[String]): Boolean = {
+    val sequenceOfTris: Seq[Boolean] = cards.groupBy(identity).map { case (item, duplicates) => {
+      duplicates.size >= 2 && Seq("6","5","4").contains(item)
+    }
+    }.toSeq
+    sequenceOfTris.contains(true)
+  }
+
   def calculateBetForPlayer(request: JsonObject, meAsAPlayer: JsonObject) = {
     val largest_current = request.get("current_buy_in").getAsInt()
 
@@ -124,6 +132,7 @@ object Player {
     val minimum_raise = request.get("minimum_raise").getAsInt()
     val raise = call + minimum_raise
     val doubleraise = call + minimum_raise*2
+    val tripleRaise = call + minimum_raise*3
     val small_blind = request.get("small_blind").getAsInt()
 
     val pot = request.get("pot").getAsInt()
@@ -133,8 +142,9 @@ object Player {
 
     myCards match {
 //      case _ if goodCommonNotForMyCards(communityCards, myCards) => 0
-      case _ if isTrisIn(myCards ++ communityCards) => doubleraise
-      case _ if isGoodDoubleIn(myCards ++ communityCards) => call
+      case _ if isTrisIn(myCards ++ communityCards) => tripleRaise
+      case _ if isGoodDoubleIn(myCards ++ communityCards) => doubleraise
+      case _ if isNotSoGoodDoubleIn(myCards ++ communityCards) => call
       case _ if aGoodCardIn(myCards) && currentPotkLow(request, small_blind) => call
 //      case _ if small_blind == 160 => 0
 //      case _ if bet_index == 6 && currentPotkLow(request, small_blind) => raise
