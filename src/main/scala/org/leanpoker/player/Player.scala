@@ -124,7 +124,7 @@ object Player {
     val small_blind = jsonObject.get("small_blind").getAsInt()
 
     val pot = jsonObject.get("pot").getAsInt()
-
+    val bet_index = jsonObject.get("bet_index").getAsInt()
 
     myCards match {
 //      case _ if goodCommonNotForMyCards(communityCards) => 0
@@ -132,6 +132,7 @@ object Player {
       case _ if isTrisIn(myCards ++ communityCards) => raise
       case _ if isGoodDoubleIn(myCards ++ communityCards) => call
       case _ if aGoodCardIn(myCards) && currentPotkLow(pot, small_blind) => call
+      case _ if bet_index == 6 && currentPotkLow(pot, small_blind) => raise
       case _ => 0
     }
 
