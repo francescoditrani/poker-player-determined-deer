@@ -103,7 +103,7 @@ object Player {
     myCards match {
 //      case _ if isTrisIn(myCards ++ communityCards) => raise + minimum_raise
       case _ if areCoupleOfCardsIn(myCards ++ communityCards) => raise
-      case _ if aGoodCardIn(myCards) => call
+//      case _ if aGoodCardIn(myCards) => call
       case _ => 0
     }
 
