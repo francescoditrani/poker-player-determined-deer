@@ -67,7 +67,7 @@ object Player {
 
   def isGoodDoubleIn(cards: Seq[String]): Boolean = {
     val sequenceOfTris: Seq[Boolean] = cards.groupBy(identity).map { case (item, duplicates) => {
-      duplicates.size >= 2 && Seq("J","Q","K","A","10","9").contains(item)
+      duplicates.size >= 2 && Seq("J","Q","K","A","10","9","8","7").contains(item)
     }
     }.toSeq
     sequenceOfTris.contains(true)
