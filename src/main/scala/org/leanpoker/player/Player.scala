@@ -69,6 +69,17 @@ object Player {
   }
 
 
+  def getCommunityCards(jsonObject: JsonObject): Seq[String] = {
+    jsonObject.get("community_cards").getAsJsonArray()
+      .iterator().toSeq.map( (cardJsonElement) => {
+      cardJsonElement.getAsJsonObject().get("rank").getAsString()
+    })
+  }
+
+//  def isTrisIn(cards: Seq[String]) = {
+//
+//  }
+
   def calculateBetForPlayer(jsonObject: JsonObject, meAsAPlayer: JsonObject) = {
     val largest_current = jsonObject.get("current_buy_in").getAsInt()
 
@@ -76,6 +87,7 @@ object Player {
     val bet = meAsAPlayer.get("bet").getAsInt()
 
     val myCards: Seq[String] = getMyCards(meAsAPlayer)
+    val communityCards: Seq[String] = getCommunityCards(jsonObject)
 
     val playable = stack-bet
 
@@ -85,8 +97,12 @@ object Player {
 
     println(s"$largest_current $stack, $bet,$myCards, $playable, $call"  )
 
+
+
+
     myCards match {
-      case _ if areCoupleOfCardsIn(myCards) => raise
+//      case _ if isTrisIn(myCards ++ communityCards) => raise + minimum_raise
+      case _ if areCoupleOfCardsIn(myCards ++ communityCards) => raise
       case _ if aGoodCardIn(myCards) => call
       case _ => 0
     }
