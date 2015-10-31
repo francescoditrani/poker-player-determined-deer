@@ -24,7 +24,8 @@ object Player {
   }
 
 
-  def goodCards(myCards: Seq[String]): Boolean = {
+
+  def aGoodCardIn(myCards: Seq[String]): Boolean = {
     myCards.exists(goodSingleCard)
   }
 
@@ -63,6 +64,8 @@ object Player {
     }
   }
 
+  def areCoupleOfCardsIn(myCards: Seq[String]): Boolean = ???
+
 
   def calculateBetForPlayer(jsonObject: JsonObject, meAsAPlayer: JsonObject) = {
     val largest_current = jsonObject.get("current_buy_in").getAsInt()
@@ -75,11 +78,14 @@ object Player {
     val playable = stack-bet
 
     val call = largest_current - bet
+    val minimum_raise = jsonObject.get("minimum_raise").getAsInt()
+    val raise = call + minimum_raise
 
     println(s"$largest_current $stack, $bet,$myCards, $playable, $call"  )
 
     myCards match {
-      case _ if goodCards(myCards) => call
+      case _ if areCoupleOfCardsIn(myCards) => raise
+      case _ if aGoodCardIn(myCards) => call
       case _ => 0
     }
 
