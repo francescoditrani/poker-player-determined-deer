@@ -76,9 +76,17 @@ object Player {
     })
   }
 
-//  def isTrisIn(cards: Seq[String]) = {
-//
-//  }
+
+  def isTrisIn(cards: Seq[String]):Boolean = {
+
+    val sequenceOfTris: Seq[Boolean] = cards.groupBy(identity).map { case (item, duplicates) => {
+      duplicates.size >= 3
+    }
+    }.toSeq
+    sequenceOfTris.contains(true)
+
+  }
+
 
   def calculateBetForPlayer(jsonObject: JsonObject, meAsAPlayer: JsonObject) = {
     val largest_current = jsonObject.get("current_buy_in").getAsInt()
@@ -94,14 +102,12 @@ object Player {
     val call = largest_current - bet
     val minimum_raise = jsonObject.get("minimum_raise").getAsInt()
     val raise = call + minimum_raise
-
-    println(s"$largest_current $stack, $bet,$myCards, $playable, $call"  )
-
+    val doubleraise = call + minimum_raise*2
 
 
 
     myCards match {
-//      case _ if isTrisIn(myCards ++ communityCards) => raise + minimum_raise
+      case _ if isTrisIn(myCards ++ communityCards) => doubleraise
       case _ if areCoupleOfCardsIn(myCards ++ communityCards) => raise
 //      case _ if aGoodCardIn(myCards) => call
       case _ => 0

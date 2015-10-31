@@ -8,19 +8,25 @@ import org.scalatest.FunSuite
  */
 class Player$Test extends FunSuite {
 
-  test("print json"){
-
-    val request: JsonObject = new JsonObject()
-    val nestedJson = new JsonObject()
-    nestedJson.add("nested", new JsonPrimitive("hello"))
-    request.add("key", nestedJson)
-
-    val jsonObject = request.getAsJsonObject()
-    val element = jsonObject.get("key").getAsJsonObject().get("nested").getAsString()
-    println(element)
+  test("tris in test"){
 
 
-    Player.betRequest(request)
+    assert(!Player.isTrisIn(Seq("1","2","1","3")))
+    assert(Player.isTrisIn(Seq("1","2","1","3","1")))
+
+
+
+//    val request: JsonObject = new JsonObject()
+//    val nestedJson = new JsonObject()
+//    nestedJson.add("nested", new JsonPrimitive("hello"))
+//    request.add("key", nestedJson)
+//
+//    val jsonObject = request.getAsJsonObject()
+//    val element = jsonObject.get("key").getAsJsonObject().get("nested").getAsString()
+//    println(element)
+//
+//
+//    Player.betRequest(request)
 
   }
 
