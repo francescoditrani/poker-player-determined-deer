@@ -64,8 +64,12 @@ object Player {
     }
   }
 
-  def areRepeatedCardsIn(myCards: Seq[String]): Boolean = {
-    myCards.toSet.size < myCards.size
+  def isGoodDoubleIn(cards: Seq[String]): Boolean = {
+    val sequenceOfTris: Seq[Boolean] = cards.groupBy(identity).map { case (item, duplicates) => {
+      duplicates.size >= 2 && Seq("J","Q","K","A","10","9").contains(item)
+    }
+    }.toSeq
+    sequenceOfTris.contains(true)
   }
 
 
@@ -126,7 +130,7 @@ object Player {
 //      case _ if goodCommonNotForMyCards(communityCards) => 0
 
       case _ if isTrisIn(myCards ++ communityCards) => raise
-      case _ if areRepeatedCardsIn(myCards ++ communityCards) => call
+      case _ if isGoodDoubleIn(myCards ++ communityCards) => call
       case _ if aGoodCardIn(myCards) && currentPotkLow(pot, small_blind) => call
       case _ => 0
     }

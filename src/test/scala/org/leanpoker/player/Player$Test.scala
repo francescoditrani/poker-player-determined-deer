@@ -14,6 +14,8 @@ class Player$Test extends FunSuite {
     assert(!Player.isTrisIn(Seq("1","2","1","3")))
     assert(Player.isTrisIn(Seq("1","2","1","3","1")))
 
+    assert(!Player.isGoodDoubleIn(Seq("8","7","8")))
+    assert(Player.isGoodDoubleIn(Seq("8","10","10")))
 
 
 //    val request: JsonObject = new JsonObject()
