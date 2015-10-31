@@ -99,10 +99,10 @@ object Player {
 
 
 
-  def currentPotkLow(request: JsonObject, small_blind: Int): Boolean = {
-    !request.get("players").getAsJsonArray().exists(playerWithHighPot(_, small_blind))
-
-  }
+//  def currentPotkLow(request: JsonObject, small_blind: Int): Boolean = {
+//    !request.get("players").getAsJsonArray().exists(playerWithHighPot(_, small_blind))
+//
+//  }
 
 //  def goodCommonNotForMyCards(communityCards: Seq[String], myCards: Seq[String]) = {
 //    communityCards.groupBy(identity)
@@ -115,6 +115,10 @@ object Player {
     }
     }.toSeq
     sequenceOfTris.contains(true)
+  }
+
+  def twoOfTheSameType(cards: Seq[String]) = {
+
   }
 
   def calculateBetForPlayer(request: JsonObject, meAsAPlayer: JsonObject) = {
@@ -136,16 +140,17 @@ object Player {
     val small_blind = request.get("small_blind").getAsInt()
 
     val pot = request.get("pot").getAsInt()
-    val bet_index = request.get("bet_index").getAsInt()
+//    val bet_index = request.get("bet_index").getAsInt()
 
 
 
     myCards match {
 //      case _ if goodCommonNotForMyCards(communityCards, myCards) => 0
       case _ if isTrisIn(myCards ++ communityCards) => raise
+      case _ if twoOfTheSameType(myCards ++ communityCards) => call
       case _ if isGoodDoubleIn(myCards ++ communityCards) => call
 //      case _ if isNotSoGoodDoubleIn(myCards ++ communityCards) => call
-      case _ if aGoodCardIn(myCards) && currentPotkLow(request, small_blind) => call
+//      case _ if aGoodCardIn(myCards) && currentPotkLow(request, small_blind) => call
 //      case _ if small_blind == 160 => 0
 //      case _ if bet_index == 6 && currentPotkLow(request, small_blind) => raise
       case _ => if ((math.random < 0.2) && (call < 320)) call else 0
