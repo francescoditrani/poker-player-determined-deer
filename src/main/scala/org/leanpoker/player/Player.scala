@@ -107,8 +107,8 @@ object Player {
 
 
     myCards match {
-      case _ if isTrisIn(myCards ++ communityCards) => doubleraise
-      case _ if areCoupleOfCardsIn(myCards ++ communityCards) => raise
+      case _ if isTrisIn(myCards ++ communityCards) => raise
+      case _ if areCoupleOfCardsIn(myCards ++ communityCards) => call
 //      case _ if aGoodCardIn(myCards) => call
       case _ => 0
     }
