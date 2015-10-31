@@ -126,7 +126,7 @@ object Player {
 
     myCards match {
 //      case _ if goodCommonNotForMyCards(communityCards, myCards) => 0
-      case _ if isTrisIn(myCards ++ communityCards) => raise
+      case _ if isTrisIn(myCards ++ communityCards) => doubleraise
       case _ if isGoodDoubleIn(myCards ++ communityCards) => call
       case _ if small_blind == 160 => 0
       case _ if aGoodCardIn(myCards) && currentPotkLow(pot, small_blind) => call
