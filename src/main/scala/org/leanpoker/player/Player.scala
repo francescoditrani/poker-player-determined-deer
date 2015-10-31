@@ -1,16 +1,28 @@
 package org.leanpoker.player
 
 import com.google.gson.{JsonObject, JsonElement}
+import scala.collection.JavaConversions._
 
 object Player {
 
   val VERSION = "Default Scala folding player"
 
-//
-//  def getMyCards(meAsAPlayer: JsonObject): Seq[String] = {
-//    val holeCards = meAsAPlayer.get("hole_cards").getAsJsonArray()
-//    holeCards.iterator().
-//  }
+
+  def getMyCards(meAsAPlayer: JsonObject): Seq[String] = {
+    val holeCards = meAsAPlayer.get("hole_cards").getAsJsonArray()
+    val holeCardsString = holeCards.iterator().toSeq.map( (cardJsonElement) => {
+      cardJsonElement.getAsJsonObject().get("rank").getAsString()
+    })
+    println(holeCardsString)
+    holeCardsString
+  }
+
+
+  def goodCards() = {
+    true
+  }
+
+
 
   def betRequest(request: JsonElement) = {
 
@@ -43,6 +55,7 @@ object Player {
         0
       }
     }
+  }
 
 
   def calculateBetForPlayer(jsonObject: JsonObject, meAsAPlayer: JsonObject) = {
@@ -51,17 +64,23 @@ object Player {
     val stack = meAsAPlayer.get("stack").getAsInt()
     val bet = meAsAPlayer.get("bet").getAsInt()
 
-//    val myCards: Seq[String] = getMyCards(meAsAPlayer)
+    val myCards: Seq[String] = getMyCards(meAsAPlayer)
 
     val playable = stack-bet
 
     val call = largest_current - bet
 
-    call
-  }
+    println(s"$largest_current $stack, $bet,$myCards, $playable, $call"  )
+
+    myCards match {
+      case _ if goodCards() => call
+      case _ => 0
+    }
 
 
   }
+
+
 
   def showdown(game: JsonElement) {
 
