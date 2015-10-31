@@ -117,8 +117,12 @@ object Player {
     sequenceOfTris.contains(true)
   }
 
-  def twoOfTheSameType(cards: Seq[String]) = {
-
+  def twoCouple(cards: Seq[String]) = {
+    cards.groupBy(identity).filter{
+      case (card, duplicates) => {
+        duplicates.size >= 2
+      }
+    }.toSeq.size >= 2
   }
 
   def veryGoodDouble(cards: Seq[String]): Boolean = {
@@ -155,7 +159,7 @@ object Player {
     myCards match {
 //      case _ if goodCommonNotForMyCards(communityCards, myCards) => 0
       case _ if isTrisIn(myCards ++ communityCards) => 9000
-//      case _ if twoOfTheSameType(myCards ++ communityCards) => call
+      case _ if twoCouple(myCards ++ communityCards) => raise
       case _ if veryGoodDouble(myCards ++ communityCards) => 9000
       case _ if isGoodDoubleIn(myCards ++ communityCards) => call
 //      case _ if isNotSoGoodDoubleIn(myCards ++ communityCards) => call
