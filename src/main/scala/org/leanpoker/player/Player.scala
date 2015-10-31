@@ -92,9 +92,15 @@ object Player {
   }
 
 
-  def currentPotkLow(pot: Int, small_blind: Int): Boolean = {
-    val onlyBlinds = 8*small_blind
-    pot <= onlyBlinds
+  def playerWithHighPot(player: JsonElement, small_blind: Int): Boolean = {
+    player.getAsJsonObject.get("stack").getAsInt() > 2*small_blind
+  }
+
+
+
+  def currentPotkLow(request: JsonObject, small_blind: Int): Boolean = {
+    !request.get("players").getAsJsonArray().exists(playerWithHighPot(_, small_blind))
+
   }
 
 //  def goodCommonNotForMyCards(communityCards: Seq[String], myCards: Seq[String]) = {
@@ -102,25 +108,25 @@ object Player {
 //  }
 
 
-  def calculateBetForPlayer(jsonObject: JsonObject, meAsAPlayer: JsonObject) = {
-    val largest_current = jsonObject.get("current_buy_in").getAsInt()
+  def calculateBetForPlayer(request: JsonObject, meAsAPlayer: JsonObject) = {
+    val largest_current = request.get("current_buy_in").getAsInt()
 
     val stack = meAsAPlayer.get("stack").getAsInt()
     val bet = meAsAPlayer.get("bet").getAsInt()
 
     val myCards: Seq[String] = getMyCards(meAsAPlayer)
-    val communityCards: Seq[String] = getCommunityCards(jsonObject)
+    val communityCards: Seq[String] = getCommunityCards(request)
 
     val playable = stack-bet
 
     val call = largest_current - bet
-    val minimum_raise = jsonObject.get("minimum_raise").getAsInt()
+    val minimum_raise = request.get("minimum_raise").getAsInt()
     val raise = call + minimum_raise
     val doubleraise = call + minimum_raise*2
-    val small_blind = jsonObject.get("small_blind").getAsInt()
+    val small_blind = request.get("small_blind").getAsInt()
 
-    val pot = jsonObject.get("pot").getAsInt()
-    val bet_index = jsonObject.get("bet_index").getAsInt()
+    val pot = request.get("pot").getAsInt()
+    val bet_index = request.get("bet_index").getAsInt()
 
 
 
@@ -129,8 +135,8 @@ object Player {
       case _ if isTrisIn(myCards ++ communityCards) => doubleraise
       case _ if isGoodDoubleIn(myCards ++ communityCards) => call
       case _ if small_blind == 160 => 0
-      case _ if aGoodCardIn(myCards) && currentPotkLow(pot, small_blind) => call
-//      case _ if bet_index == 6 && currentPotkLow(pot, small_blind) => raise
+      case _ if aGoodCardIn(myCards) && currentPotkLow(request, small_blind) => call
+//      case _ if bet_index == 6 && currentPotkLow(request, small_blind) => raise
       case _ => 0
     }
 
