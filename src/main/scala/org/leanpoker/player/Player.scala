@@ -19,7 +19,7 @@ object Player {
 
 
   def goodSingleCard(singleCard: String): Boolean = {
-    Seq("J","Q","K","A").contains(singleCard)
+    Seq("Q","K","A").contains(singleCard)
 
   }
 
@@ -64,7 +64,7 @@ object Player {
     }
   }
 
-  def areCoupleOfCardsIn(myCards: Seq[String]): Boolean = {
+  def areRepeatedCardsIn(myCards: Seq[String]): Boolean = {
     myCards.toSet.size < myCards.size
   }
 
@@ -89,9 +89,18 @@ object Player {
 
 
   def currentPotkLow(pot: Int, small_blind: Int): Boolean = {
-    val onlyBlinds = 3*small_blind
+    val onlyBlinds = 8*small_blind
     pot <= onlyBlinds
   }
+//
+//  def goodCommonNotForMyCards(communityCards: Seq[String]) = {
+//    communityCards.groupBy(identity).map{
+//      case (card, listOfThatCard) => {
+//
+//      }
+//    }
+//  }
+
 
   def calculateBetForPlayer(jsonObject: JsonObject, meAsAPlayer: JsonObject) = {
     val largest_current = jsonObject.get("current_buy_in").getAsInt()
@@ -114,8 +123,10 @@ object Player {
 
 
     myCards match {
+//      case _ if goodCommonNotForMyCards(communityCards) => 0
+
       case _ if isTrisIn(myCards ++ communityCards) => raise
-      case _ if areCoupleOfCardsIn(myCards ++ communityCards) => call
+      case _ if areRepeatedCardsIn(myCards ++ communityCards) => call
       case _ if aGoodCardIn(myCards) && currentPotkLow(pot, small_blind) => call
       case _ => 0
     }
