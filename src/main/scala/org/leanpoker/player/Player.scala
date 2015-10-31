@@ -19,7 +19,7 @@ object Player {
 
 
   def goodSingleCard(singleCard: String): Boolean = {
-    Seq("J","Q","K","A", "10").contains(singleCard)
+    Seq("J","Q","K","A").contains(singleCard)
 
   }
 
@@ -88,6 +88,11 @@ object Player {
   }
 
 
+  def currentStackLow(stack: Int, small_blind: Int): Boolean = {
+    val big_blind = 2*small_blind
+    stack <= big_blind
+  }
+
   def calculateBetForPlayer(jsonObject: JsonObject, meAsAPlayer: JsonObject) = {
     val largest_current = jsonObject.get("current_buy_in").getAsInt()
 
@@ -103,13 +108,15 @@ object Player {
     val minimum_raise = jsonObject.get("minimum_raise").getAsInt()
     val raise = call + minimum_raise
     val doubleraise = call + minimum_raise*2
+    val small_blind = jsonObject.get("small_blind").getAsInt()
+
 
 
 
     myCards match {
       case _ if isTrisIn(myCards ++ communityCards) => raise
       case _ if areCoupleOfCardsIn(myCards ++ communityCards) => call
-//      case _ if aGoodCardIn(myCards) => call
+      case _ if aGoodCardIn(myCards) && currentStackLow(stack, small_blind) => call
       case _ => 0
     }
 
