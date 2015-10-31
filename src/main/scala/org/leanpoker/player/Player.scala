@@ -2,6 +2,7 @@ package org.leanpoker.player
 
 import com.google.gson.{JsonObject, JsonElement}
 import scala.collection.JavaConversions._
+import scala.util.Random
 
 object Player {
 
@@ -137,7 +138,7 @@ object Player {
       case _ if small_blind == 160 => 0
       case _ if aGoodCardIn(myCards) && currentPotkLow(request, small_blind) => call
 //      case _ if bet_index == 6 && currentPotkLow(request, small_blind) => raise
-      case _ => 0
+      case _ => if (math.random < 0.3) call else 0
     }
 
 
